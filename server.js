@@ -22,10 +22,10 @@ app.get('/', (req, res) =>
 res.sendFile(path.join(__dirname, '/public/index.html'))
 )
 
-// // Get route for home page
-// app.get('/notes', (req, res) => 
-// res.sendFile(path.join(__dirname, '/public/notes.html'))
-// )
+// Get route for home page
+app.get('/notes', (req, res) => 
+res.sendFile(path.join(__dirname, '/public/notes.html'))
+)
 
 // GET db.json to append notes from database
 app.get('/api/notes', (req, res) => {
@@ -40,34 +40,12 @@ app.get('/api/notes/:id', (req, res) => {
 })
 
 app.delete('/api/notes/:id', (req, res) => {
-    var id = req.params.id
-    let obj = db.filter(o => o.note_id != id);
-    res.json(obj);
-    console.log(obj)
-
-    writeToFile('./db/db.json', obj)
-    res.json(`Note added successfully 🚀`);
-   
+    res.sendFile(path.join(__dirname, 'public/notes.html'))
 })
 
-// app.post('/api/notes', (req, res) => {
-//     console.log(req.body);
-  
-//   const { title, text } = req.body;
-
-//   if (req.body) {
-//     const newNote = {
-//       title,
-//       text,
-//       note_id: uuid(),
-//     };
-
-//     readAndAppend(newNote, './db/db.json');
-//     res.json(`Note added successfully 🚀`);
-//   } else {
-//     res.error('Error in adding Note');
-//   }
-// })
+app.post('/api/notes', (req, res) => {
+   res.sendFile(path.join(__dirname, 'public/notes.html'))
+})
 
 app.listen(PORT, () =>
   console.log(`App listening at http://localhost:${PORT} 🚀`)
