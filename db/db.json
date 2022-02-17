@@ -1,21 +1,6 @@
 [
-    {
-        "title": "Example",
-        "text": "Write tasks here"
-    },
-    {
-        "title": "Hello",
-        "text": "Hi",
-        "note_id": "75e1"
-    },
-    {
-        "title": "Goodbye",
-        "text": "Bye",
-        "note_id": "3e5a"
-    },
-    {
-        "title": "Good afternoon",
-        "text": "Afternoon",
-        "note_id": "aa07"
-    }
+   {
+      "title": "Example",
+      "text": "Write tasks here"
+   }
 ]

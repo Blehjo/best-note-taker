@@ -3,8 +3,7 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const uuid = require('./helpers/uuid')
-const db = require('./db/db.json')
-const { readAndAppend, writeToFile, readFromFile } = require('./helpers/fsUtils')
+let db = require('./db/db.json')
 
 const PORT = process.env.PORT || 3001;
 
@@ -14,56 +13,57 @@ app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-
-
 // Get route for home page
-app.get('/', (req, res) => 
-res.sendFile(path.join(__dirname, '/public/index.html'))
-)
+app.get('/', (req, res) => res.sendFile(path.join(__dirname, '/public/index.html')));
 
 // Get route for notes page
-app.get('/notes', (req, res) => 
-res.sendFile(path.join(__dirname, '/public/notes.html'))
-)
+app.get('/notes', (req, res) => res.sendFile(path.join(__dirname, '/public/notes.html')));
 
 // GET db.json to append notes from database
-app.get('/api/notes', (req, res) => {
-    res.json(db);
-})
+app.get('/api/notes', (req, res) => res.json(db));
 
 app.get('api/notes/:id', (req, res) => {
-    var id = req.params.id
+    const {title, text} = req.body;
+
     let obj = db.find(o => o.note_id === id);
     res.json(obj);
-    console.log(obj)
+
 })
 
 app.post('/api/notes', (req, res) => {
-  const { title, text } = req.body;
-
-  if (req.body) {
+    const {title, text} = req.body
+    
     const newNote = {
-      title,
-      text,
-      note_id: uuid(),
-    };
+        title,
+        text,
+        id: uuid()
+    }
 
-    readAndAppend(newNote, './db/db.json');
-    res.json(`Note added successfully 🚀`);
-  } else {
-    res.error('Error in adding Note');
-  }
-})
+    db.push(newNote)
+    res.json(db)
+    fs.writeFile('db/db.json', JSON.stringify(db, null, 3), (err) => {
+        if (err) console.log('ERROR!')
+        else {console.log('SUCCESS! WROTE db.json with new array')}
+    })
+});
 
-app.delete('/api/notes/:id', (req, res) => {
-    var id = req.params.id
-    let obj = db.filter(o => o.note_id != id);
-    res.json(obj);
-    console.log(obj)
-
-    writeToFile('./db/db.json', obj)
-    res.json(`Note added successfully 🚀`);
-   
+app.delete(`/api/notes/:id`, (req, res) => {
+    if (db.length <= 1) {
+        db = []
+        res.json(db)
+        fs.writeFile('db/db.json', JSON.stringify(db, null, 3), (err) => {
+            if (err) console.log('ERROR!')
+            else {console.log('SUCCESS! WROTE db.json with new array')}
+        })
+    } else {
+        let newDB = db.filter((item) => item.id !== req.params.id)
+        db = newDB
+        res.json(db)
+        fs.writeFile('db/db.json', JSON.stringify(db, null, 3), (err) => {
+            if (err) console.log('ERROR!')
+            else {console.log('SUCCESS! WROTE db.json with new array')}
+        })
+    }
 })
 
 app.listen(PORT, () =>
