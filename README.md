@@ -8,7 +8,6 @@
   This is an application that helps you keep track of tasks.  The user can create as many notes as desired and delete them upon completion.  To start, the user has to select 'get started.' The user is taken to the next screen, where he/she/they is/are presented with options to view past notes or create and save a new note.  To save a note the user has to input a title and text.
   
   Site: https://better-note-taker.herokuapp.com/notes
-  Repository: github.com/Blehjo/best-note-taker
   
   ## Table of Contents
   * [Installation](#installation)
